@@ -1,0 +1,244 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: "pt" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const github = import.meta.env.PUBLIC_GITHUB;
+const linkedin = import.meta.env.PUBLIC_LINKEDIN;
+const email = import.meta.env.PUBLIC_EMAIL;
+---
+
+<section
+    id="about"
+    class="relative flex min-h-screen items-center justify-center overflow-hidden px-6"
+>
+    {/* Subtle radial gradient background */}
+    <div
+        class="pointer-events-none absolute inset-0"
+        style={{
+            background:
+                "radial-gradient(ellipse 60% 50% at 50% 0%, oklch(0.65 0.25 285 / 0.06) 0%, transparent 70%)",
+        }}
+    >
+    </div>
+    <div
+        class="pointer-events-none absolute inset-0"
+        style={{
+            background:
+                "radial-gradient(ellipse 40% 40% at 80% 20%, oklch(0.65 0.20 250 / 0.04) 0%, transparent 60%)",
+        }}
+    >
+    </div>
+
+    {/* Grid dot pattern */}
+    <div
+        class="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+            backgroundImage:
+                "radial-gradient(circle at 1px 1px, oklch(0.92 0.01 270) 1px, transparent 0)",
+            backgroundSize: "40px 40px",
+        }}
+    >
+    </div>
+
+    <div
+        class="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-12 lg:flex-row lg:items-center lg:gap-16"
+    >
+        {/* Left: Text content */}
+        <div class="flex-1 text-center lg:text-left">
+            {/* Status badge */}
+            <!-- <div
+                class="mb-8 inline-flex items-center gap-2 rounded-full border border-border/60 bg-secondary/50 px-4 py-1.5"
+            >
+                <span class="relative flex h-2 w-2">
+                    <span
+                        class="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"
+                    ></span>
+                    <span
+                        class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"
+                    ></span>
+                </span>
+                <span class="font-mono text-xs text-muted-foreground">
+                    Available for opportunities
+                </span>
+            </div> -->
+
+            {/* Main heading */}
+            <h1
+                class="mb-6 text-balance text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl md:text-6xl lg:text-7xl"
+            >
+                {t("hero.title_1")}
+                <span class="text-gradient">{"&"}</span>{" "}
+                <br class="hidden sm:block" />
+                {t("hero.title_2")}
+            </h1>
+
+            {/* Bio paragraph */}
+            <p
+                class="mx-auto mb-10 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground md:text-lg lg:mx-0"
+            >
+                I architect and build robust, scalable systems at the
+                intersection of hardware and software. Specializing in
+                full-stack development, cloud infrastructure, and embedded
+                systems, with a passion for clean code and performant
+                engineering.
+            </p>
+
+            {/* CTA and social links */}
+            <div class="flex flex-col items-center gap-6 lg:items-start">
+                <div class="flex items-center gap-4">
+                    <a
+                        href="#projects"
+                        class="group inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3 font-mono text-sm font-medium text-primary-foreground transition-all duration-300 hover:shadow-[0_0_24px_oklch(0.65_0.25_285_/_0.25)]"
+                    >
+                        {t("hero.view_button")}
+                        <Icon
+                            name="lucide:chevron-right"
+                            class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                        />
+                    </a>
+                    <a
+                        href="#contact"
+                        class="inline-flex items-center gap-2 rounded-lg border border-border px-6 py-3 font-mono text-sm font-medium text-foreground transition-all duration-300 hover:border-primary/50 hover:text-primary"
+                    >
+                        {t("hero.contact_button")}
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-5">
+                    <a
+                        href={`https://github.com/${github}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-muted-foreground transition-all duration-300 hover:text-foreground hover:drop-shadow-[0_0_8px_oklch(0.65_0.25_285_/_0.4)]"
+                        aria-label="GitHub Profile"
+                    >
+                        <Icon name="lucide:github" class="h-5 w-5" />
+                    </a>
+                    <a
+                        href={`https://linkedin.com/in/${linkedin}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="text-muted-foreground transition-all duration-300 hover:text-foreground hover:drop-shadow-[0_0_8px_oklch(0.65_0.20_250_/_0.4)]"
+                        aria-label="LinkedIn Profile"
+                    >
+                        <Icon name="lucide:linkedin" class="h-5 w-5" />
+                    </a>
+                    <span class="h-4 w-px bg-border"></span>
+                    <span class="font-mono text-xs text-muted-foreground">
+                        {email}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        {/* Right: Portrait photo */}
+        <div
+            class="relative flex flex-shrink-0 items-center justify-center"
+        >
+            {/* Outer glow ring */}
+            <div
+                class="absolute -inset-4 rounded-full opacity-40 blur-2xl"
+                style={{
+                    background:
+                        "conic-gradient(from 180deg, oklch(0.65 0.25 285 / 0.3), oklch(0.65 0.20 250 / 0.2), oklch(0.65 0.25 285 / 0.1), oklch(0.65 0.20 250 / 0.3))",
+                }}
+            >
+            </div>
+
+            {/* Decorative orbit ring */}
+            <div
+                class="absolute -inset-6 animate-[spin_25s_linear_infinite] rounded-full border border-border/20"
+            >
+                <div
+                    class="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-primary/60"
+                >
+                </div>
+            </div>
+
+            {/* Second orbit */}
+            <div
+                class="absolute -inset-12 hidden animate-[spin_40s_linear_infinite_reverse] rounded-full border border-border/10 lg:block"
+            >
+                <div
+                    class="absolute -right-1 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-secondary/50"
+                >
+                </div>
+            </div>
+
+            {/* Photo container */}
+            <div
+                class="group relative h-56 w-56 sm:h-64 sm:w-64 md:h-72 md:w-72 lg:h-80 lg:w-80"
+            >
+                {/* Border ring */}
+                <div
+                    class="absolute -inset-px rounded-full bg-gradient-to-br from-primary/40 via-transparent to-primary/80 p-px transition-all duration-500 group-hover:from-primary/60 group-hover:to-primary"
+                >
+                    <div class="h-full w-full rounded-full bg-background">
+                    </div>
+                </div>
+
+                {/* Image with mask */}
+                <div class="absolute inset-1 overflow-hidden rounded-full">
+                    <img src="/images/portrait.jpg" alt="" class="object-cover transition-transform duration-700 group-hover:scale-105">
+                    {/* Subtle overlay for dark blending */}
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-background/30 via-transparent to-transparent"
+                    >
+                    </div>
+                </div>
+
+                {/* Corner accent dots */}
+                <div class="absolute -bottom-2 -right-2 flex gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-primary/70"
+                    ></span>
+                    <span class="h-1.5 w-1.5 rounded-full bg-secondary/70"
+                    ></span>
+                </div>
+                <div class="absolute -left-2 -top-2 flex gap-1">
+                    <span class="h-1.5 w-1.5 rounded-full bg-secondary/70"
+                    ></span>
+                    <span class="h-1.5 w-1.5 rounded-full bg-primary/70"
+                    ></span>
+                </div>
+
+                {/* Status/tech tag floating next to photo */}
+                <div
+                    class="absolute -right-4 top-8 hidden rounded-md border border-border/40 bg-card/80 px-3 py-1.5 backdrop-blur-sm lg:block"
+                >
+                    <span class="font-mono text-[10px] text-primary"
+                        >{"<Engineer />"}</span
+                    >
+                </div>
+                <div
+                    class="absolute -left-4 bottom-10 hidden rounded-md border border-border/40 bg-card/80 px-3 py-1.5 backdrop-blur-sm lg:block"
+                >
+                    <span class="font-mono text-[10px] text-primary"
+                        >{"sys.build()"}</span
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {/* Scroll indicator */}
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <a
+            href="#skills"
+            class="flex flex-col items-center gap-2 text-muted-foreground transition-colors hover:text-primary"
+            aria-label="Scroll to skills"
+        >
+            <span class="font-mono text-[10px] uppercase tracking-widest">
+                Scroll
+            </span>
+            <Icon name="lucide:arrow-down" class="h-4 w-4 animate-bounce" />
+        </a>
+    </div>
+</section>

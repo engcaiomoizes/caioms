@@ -1,0 +1,153 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: "pt" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const github = import.meta.env.PUBLIC_GITHUB;
+
+interface Project {
+    title: string;
+    description: string;
+    tags: string[];
+    github?: string;
+    live?: string;
+    featured?: boolean;
+}
+
+const projects: Project[] = [
+    {
+        title: "ConvertAll",
+        description:
+            "Converta números, moedas e textos. Conversões de bases numéricas (decimal, binário, hexadecimal e octal), e também codificação de texto.",
+        tags: ["Next.js", "Firebase", "REST API", "TypeScript", "Tailwind CSS"],
+        // github: "https://github.com",
+        live: "https://convertallcode.vercel.app",
+        featured: true,
+    },
+    {
+        title: "Love Time",
+        description:
+            "Calculador de tempo juntos para casal. Faça o cálculo de quanto tempo você e seu amor estão juntos, em um post com foto e música.",
+        tags: [
+            "Next.js",
+            "Firebase",
+            "REST API",
+            "TypeScript",
+            "Tailwind CSS",
+            "Cloudinary",
+        ],
+        // github: "https://github.com",
+        live: "https://yourlovetime.vercel.app",
+        featured: true,
+    },
+    {
+        title: "Java Web Scraping",
+        description:
+            "Aplicativo de Web Scraping desenvolvido em Java, criado para extrair e organizar informações de hardwares da KaBuM! de forma automatizada.",
+        tags: ["Java", "Jsoup", "Gson", "Apache POI"],
+        github: `https://github.com/${github}/WebScraping`,
+        featured: true,
+    },
+];
+---
+
+<section id="projects" class="relative px-6 py-32">
+    {/* Subtle background accent */}
+    <div
+        class="pointer-events-none absolute inset-0"
+        style={{
+            background:
+                "radial-gradient(ellipse 50% 30% at 20% 50%, oklch(0.65 0.20 250 / 0.03) 0%, transparent 70%)",
+        }}
+    >
+    </div>
+
+    <div class="relative mx-auto max-w-6xl">
+        {/* Section header */}
+        <div class="mb-16">
+            <span
+                class="mb-3 block font-mono text-xs uppercase tracking-widest text-primary"
+            >
+                {t("projects.subtitle")}
+            </span>
+            <h2
+                class="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl"
+            >
+                {t("projects.title")}
+            </h2>
+            <p class="max-w-lg text-muted-foreground">
+                {t("projects.description")}
+            </p>
+        </div>
+
+        {/* Projects grid */}
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {
+                projects.map((project) => (
+                    <div class="group relative flex flex-col rounded-xl border border-white/5 bg-base-200/40 p-6 transition-all duration-500 hover:border-primary/30 hover:bg-base-200/60 hover:shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:backdrop-blur-sm">
+                        <div class="mb-4 flex items-center justify-between">
+                            <Icon
+                                name="lucide:folder"
+                                class="h-6 w-6 text-primary transition-colors duration-300"
+                            />
+
+                            <div class="flex items-center gap-3">
+                                {project.github && (
+                                    <a
+                                        href={project.github}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-base-content/40 transition-colors duration-300 hover:text-primary"
+                                        aria-label={`GitHub repository for ${project.title}`}
+                                    >
+                                        <Icon
+                                            name="lucide:github"
+                                            class="h-4 w-4"
+                                        />
+                                    </a>
+                                )}
+                                {project.live && (
+                                    <a
+                                        href={project.live}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="text-base-content/40 transition-colors duration-300 hover:text-primary"
+                                        aria-label={`Live demo for ${project.title}`}
+                                    >
+                                        <Icon
+                                            name="lucide:external-link"
+                                            class="h-4 w-4"
+                                        />
+                                    </a>
+                                )}
+                            </div>
+                        </div>
+
+                        <h3 class="mb-2 text-lg font-semibold text-base-content transition-colors duration-300 group-hover:text-primary">
+                            {project.title}
+                        </h3>
+
+                        <p class="mb-6 flex-1 text-sm leading-relaxed text-base-content/60">
+                            {project.description}
+                        </p>
+
+                        <div class="flex flex-wrap gap-x-4 gap-y-2">
+                            {project.tags.map((tag) => (
+                                <span class="font-mono text-[11px] text-base-content/40 transition-colors duration-300 group-hover:text-base-content/70">
+                                    # {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                ))
+            }
+        </div>
+    </div>
+</section>

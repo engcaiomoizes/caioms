@@ -1,0 +1,115 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+    lang: 'pt' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const github = import.meta.env.PUBLIC_GITHUB;
+const linkedin = import.meta.env.PUBLIC_LINKEDIN;
+const email = import.meta.env.PUBLIC_EMAIL;
+---
+
+<footer id="contact" class="border-t border-border/40 px-6 py-16">
+    <div class="mx-auto max-w-6xl">
+        <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
+            {/* Brand column */}
+            <div class="md:col-span-1">
+                <div class="mb-4 flex items-center gap-2">
+                    <Icon name="lucide:terminal" class="h-4 w-4 text-primary" />
+                    <span
+                        class="font-mono text-sm font-semibold tracking-wider text-foreground"
+                    >
+                        {"Caio M. Santos"}
+                    </span>
+                </div>
+                <p
+                    class="max-w-xs text-sm leading-relaxed text-muted-foreground"
+                >
+                    {t("footer.description")}
+                </p>
+            </div>
+
+            {/* Links column */}
+            <div class="md:col-span-1">
+                <h4
+                    class="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground"
+                >
+                    {t("footer.nav.label")}
+                </h4>
+                <ul class="flex flex-col gap-2">
+                    {
+                        [
+                            { label: "About", href: "#about" },
+                            { label: "Skills", href: "#skills" },
+                            { label: "Projects", href: "#projects" },
+                            { label: "Blog", href: "#blog" },
+                        ].map((link) => (
+                            <li>
+                                <a
+                                    href={link.href}
+                                    class="text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                                >
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))
+                    }
+                </ul>
+            </div>
+
+            {/* Contact column */}
+            <div class="md:col-span-1">
+                <h4
+                    class="mb-4 font-mono text-xs uppercase tracking-widest text-muted-foreground"
+                >
+                    {t("footer.contact.label")}
+                </h4>
+                <div class="flex flex-col gap-3">
+                    <a
+                        href=`mailto:${email}`
+                        class="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                    >
+                        <Icon name="lucide:mail" class="h-4 w-4" />
+                        {email}
+                    </a>
+                    <a
+                        href=`https://github.com/${github}`
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                    >
+                        <Icon name="lucide:github" class="h-4 w-4" />
+                        github.com/{github}
+                    </a>
+                    <a
+                        href=`https://linkedin.com/in/${linkedin}`
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                    >
+                        <Icon name="lucide:linkedin" class="h-4 w-4" />
+                        linkedin.com/in/{linkedin}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div
+            class="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border/30 pt-8 sm:flex-row"
+        >
+            <p class="font-mono text-xs text-muted-foreground/60">
+                {t("footer.info")}
+            </p>
+            <p class="font-mono text-xs text-muted-foreground/60">
+                {`\u00A9 2026 ${t("footer.copyright")}`}
+            </p>
+        </div>
+    </div>
+</footer>

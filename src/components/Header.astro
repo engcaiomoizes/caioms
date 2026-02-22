@@ -1,0 +1,201 @@
+---
+import { Icon } from "astro-icon/components";
+import ThemeController from "./ThemeController.astro";
+
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: "pt" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const currentPath = Astro.url.pathname;
+
+// Lógica de destino para o switch de idioma
+const targetLocalePath = lang === 'en'
+    ? currentPath.replace(/^\/en/, '') || '/'
+    : `/en${currentPath.endsWith('/') ? currentPath.slice(0, -1) : currentPath}`;
+
+interface NavLink {
+    href: string;
+    label: string;
+}
+
+const navLinks: NavLink[] = [
+    { href: "#about", label: t("nav.about") },
+    { href: "#skills", label: t("nav.skills") },
+    { href: "#projects", label: t("nav.projects") },
+    { href: "#blog", label: t("nav.blog") },
+    { href: "#contact", label: t("nav.contact") },
+];
+---
+
+<header
+    id="header"
+    class="fixed top-0 left-0 right-0 z-50 transition-all duration-150 bg-transparent border-b border-transparent"
+>
+    <nav
+        id="navbar"
+        class="mx-auto flex max-w-6xl item-center justify-between px-6 py-4"
+    >
+        <a
+            href="#"
+            class="flex items-center gap-2 text-foreground transition-colors hover:text-primary"
+        >
+            <Icon name="lucide:terminal" class="h-5 w-5 text-primary" />
+            <span class="font-mono text-sm font-semibold tracking-wider">
+                {"Caio M. Santos"}
+            </span>
+        </a>
+
+        {/* Desktop nav */}
+        <ul class="hidden items-center gap-8 md:flex">
+            {
+                navLinks.map((link) => (
+                    <li>
+                        <a
+                            href={link.href}
+                            class="font-mono text-xs uppercase tracking-widest text-muted-foreground transition-colors duration-300 hover:text-primary"
+                        >
+                            {link.label}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+
+        {/* Right-side controls */}
+        <div class="flex items-center gap-1.5">
+            {/* Language Toggle */}
+            <a
+                href={targetLocalePath}
+                class="group btn btn-ghost btn-sm btn-square border-none relative text-muted-foreground hover:text-foreground hover:bg-primary"
+                aria-label={`Switch to ${lang === "en" ? "Português" : "English"}`}
+            >
+                <Icon
+                    name="lucide:languages"
+                    class="h-4 w-4 transition-transform duration-300 group-hover:scale-110"
+                />
+                <span
+                    class="absolute -bottom-0.5 -right-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[7px] font-mono font-bold text-secondary-foreground ring-1 ring-border/50"
+                >
+                    {lang === "en" ? "EN" : "BR"}
+                </span>
+            </a>
+
+            {/* Theme Toggle */}
+            <ThemeController />
+
+            {/* Divider */}
+            <div class="mx-1 hidden h-5 w-px bg-border/50 lg:block"></div>
+
+            {/* Mobile toggle */}
+            <button
+                id="menu-toggle"
+                class="text-base-content/70 transition-colors hover:text-base-content md:hidden"
+                aria-label="Toggle navigation"
+            >
+                <Icon name="lucide:menu" id="icon-menu" size={20} />
+                <Icon
+                    name="lucide:x"
+                    id="icon-close"
+                    class="hidden"
+                    size={20}
+                />
+            </button>
+        </div>
+
+        <button
+            id="menu-toggle"
+            class="text-base-content/70 transition-colors hover:text-base-content md:hidden"
+            aria-label="Toggle navigation"
+        >
+            <Icon name="lucide:menu" id="icon-menu" size={20} />
+            <Icon name="lucide:x" id="icon-close" class="hidden" size={20} />
+        </button>
+    </nav>
+
+    <div
+        id="mobile-menu"
+        class="hidden glass border-t border-white/10 md:hidden overflow-hidden transition-all duration-300"
+    >
+        <ul class="flex flex-col gap-1 px-6 py-4">
+            {
+                navLinks.map((link) => (
+                    <li>
+                        <a
+                            href={link.href}
+                            class="mobile-link block rounded-md px-3 py-2 font-mono text-xs uppercase tracking-widest text-base-content/70 transition-colors hover:bg-base-200 hover:text-base-content"
+                        >
+                            {link.label}
+                        </a>
+                    </li>
+                ))
+            }
+        </ul>
+    </div>
+</header>
+
+<script>
+    const header = document.getElementById("header");
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const iconMenu = document.getElementById("icon-menu");
+    const iconClose = document.getElementById("icon-close");
+    const mobileLinks = document.querySelectorAll(".mobile-link");
+
+    // Toggle Menu Mobile
+    function toggleMenu() {
+        const isOpened = !mobileMenu?.classList.contains("hidden");
+
+        if (isOpened) {
+            mobileMenu?.classList.add("hidden");
+            iconMenu?.classList.remove("hidden");
+            iconClose?.classList.add("hidden");
+        } else {
+            mobileMenu?.classList.remove("hidden");
+            iconMenu?.classList.add("hidden");
+            iconClose?.classList.remove("hidden");
+        }
+    }
+
+    menuToggle?.addEventListener("click", toggleMenu);
+
+    // Fecha o menu ao clicar em um link (simula o comportamento do SPA)
+    mobileLinks.forEach((link) => {
+        link.addEventListener("click", () => {
+            mobileMenu?.classList.add("hidden");
+            iconMenu?.classList.remove("hidden");
+            iconClose?.classList.add("hidden");
+        });
+    });
+
+    // Lógica do Scroll (isScrolled)
+    const handleScroll = () => {
+        if (window.scrollY > 20) {
+            // header?.classList.add("glass", "border-b", "border-accent/10");
+            header?.classList.add(
+                "backdrop-blur-sm",
+                "bg-base-100/70",
+                "border-base-content/5",
+            );
+            header?.classList.remove("bg-transparent", "border-transparent");
+        } else {
+            // header?.classList.remove("glass", "border-b", "border-accent/10");
+            header?.classList.remove(
+                "backdrop-blur-sm",
+                "bg-base-100/70",
+                "border-base-content/5",
+            );
+            header?.classList.add("bg-transparent", "border-transparent");
+        }
+    };
+
+    // Passive: true melhora a performance de scroll em dispositivos móveis
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    // Executa uma vez no load caso a página já comece scrollada (ex: refresh)
+    handleScroll();
+</script>

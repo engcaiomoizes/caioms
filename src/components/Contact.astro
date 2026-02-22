@@ -1,0 +1,253 @@
+---
+import { actions } from "astro:actions";
+import { Icon } from "astro-icon/components";
+
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+    lang: 'pt' | 'en';
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const github = import.meta.env.PUBLIC_GITHUB;
+const linkedin = import.meta.env.PUBLIC_LINKEDIN;
+const email = import.meta.env.PUBLIC_EMAIL;
+
+const result = Astro.getActionResult(actions.contact);
+
+const isSent = result !== undefined && !result.error;
+const hasError = result !== undefined && result.error;
+
+const title = t("contact.title");
+const words = title.split(" ");
+const lastWord = words.pop();
+const remainingTitle = words.join(" ");
+
+const contactMethods = [
+    {
+        iconName: "lucide:mail",
+        label: "Email",
+        value: email,
+        href: `mailto:${email}`,
+        description: t("contact.email.description"),
+    },
+    {
+        iconName: "lucide:github",
+        label: "GitHub",
+        value: `github.com/${github}`,
+        href: `https://github.com/${github}`,
+        description: t("contact.github.description"),
+    },
+    {
+        iconName: "lucide:linkedin",
+        label: "LinkedIn",
+        value: `linkedin.com/in/${linkedin}`,
+        href: `https://linkedin.com/in/${linkedin}`,
+        description: t("contact.linkedin.description"),
+    },
+];
+---
+
+<section id="contact" class="relative px-6 py-32">
+    <div
+        class="pointer-events-none absolute inset-0"
+        style="background: 'radial-gradient(ellipse 50% 40% at 50% 100%, oklch(0.65 0.25 285 / 0.04) 0%, transparent 70%)'"
+    >
+    </div>
+
+    <div class="relative mx-auto max-w-6xl">
+        <div class="mb-16">
+            <span
+                class="mb-3 flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-primary"
+            >
+                <Icon name="lucide:message-square" class="h-3.5 w-3.5" />
+                {t("contact.subtitle")}
+            </span>
+            <h2
+                class="mb-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl"
+            >
+                {remainingTitle}
+                <span class="text-gradient">{lastWord}</span>
+            </h2>
+            <p class="max-w-lg text-muted-foreground">
+                {t("contact.description")}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-12 lg:grid-cols-5">
+            {/* Contact methods */}
+            <div class="flex flex-col gap-4 lg:col-span-2">
+                {
+                    contactMethods.map((method) => (
+                        <a
+                            href={method.href}
+                            target={
+                                method.href.startsWith("http")
+                                    ? "_blank"
+                                    : undefined
+                            }
+                            rel={
+                                method.href.startsWith("http")
+                                    ? "noopener noreferrer"
+                                    : undefined
+                            }
+                            class="group flex items-start gap-4 rounded-lg border border-transparent px-5 py-4 transition-all duration-300 hover:border-border/50 hover:bg-card/40"
+                        >
+                            <div class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/60 transition-colors duration-300 group-hover:bg-primary/10">
+                                <Icon name={method.iconName} class="h-4 w-4 text-muted-foreground transition-colors duration-300 group-hover:text-primary" />
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-semibold text-foreground">
+                                        {method.label}
+                                    </span>
+                                    {method.href !== "#" && (
+                                        <Icon name="lucide:arrow-up-right" class="h-3 w-3 text-muted-foreground/40 transition-all duration-300 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                                    )}
+                                </div>
+                                <p class="mt-0.5 font-mono text-xs text-muted-foreground">
+                                    {method.value}
+                                </p>
+                                <p class="mt-1 text-xs text-muted-foreground/60">
+                                    {method.description}
+                                </p>
+                            </div>
+                        </a>
+                    ))
+                }
+            </div>
+
+            {/* Contact form */}
+            <div class="lg:col-span-3">
+                <form
+                    method="POST" action={actions.contact}
+                    class="rounded-xl border border-border/50 bg-card/30 p-6 backdrop-blur-sm sm:p-8"
+                >
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-accent-foreground">
+                            {t("contact.form.title")}
+                        </h3>
+                        <p class="mt-1 text-sm text-muted-foreground/60">
+                            {t("contact.form.subtitle")}
+                        </p>
+                    </div>
+
+                    <div class="flex flex-col gap-5">
+                        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                            <div>
+                                <label
+                                    for="name"
+                                    class="mb-2 block font-mono text-xs uppercase tracking-wider text-muted-foreground"
+                                >
+                                    {t("contact.form.field.name.label")}
+                                </label>
+                                <input
+                                    id="name"
+                                    name="name"
+                                    type="text"
+                                    required
+                                    placeholder={t("contact.form.field.name.placeholder")}
+                                    class="w-full rounded-lg border border-border/50 bg-background/60 px-4 py-3 text-sm text-foreground placeholder-muted-foreground/40 outline-none transition-all duration-300 focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
+                                />
+                            </div>
+                            <div>
+                                <label
+                                    for="email"
+                                    class="mb-2 block font-mono text-xs uppercase tracking-wider text-muted-foreground"
+                                >
+                                    {t("contact.form.field.email.label")}
+                                </label>
+                                <input
+                                    id="email"
+                                    name="email"
+                                    type="email"
+                                    required
+                                    placeholder={t("contact.form.field.email.placeholder")}
+                                    class="w-full rounded-lg border border-border/50 bg-background/60 px-4 py-3 text-sm text-foreground placeholder-muted-foreground/40 outline-none transition-all duration-300 focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                for="message"
+                                class="mb-2 block font-mono text-xs uppercase tracking-wider text-muted-foreground"
+                            >
+                                {t("contact.form.field.message.label")}
+                            </label>
+                            <textarea
+                                id="message"
+                                name="message"
+                                required
+                                rows={5}
+                                placeholder={t("contact.form.field.message.placeholder")}
+                                class="w-full resize-none rounded-lg border border-border/50 bg-background/60 px-4 py-3 text-sm leading-relaxed text-foreground placeholder-muted-foreground/40 outline-none transition-all duration-300 focus:border-primary/50 focus:ring-1 focus:ring-primary/20"
+                            ></textarea>
+                        </div>
+                        <button
+                            type="submit"
+                            id="submit-btn"
+                            class="group cursor-pointer inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-6 py-3 font-mono text-sm font-medium text-white transition-all duration-300 hover:shadow-[0_0_24px_oklch(0.65_0.25_285_/_0.25)] disabled:opacity-60 disabled:cursor-not-allowed"
+                        >
+                            <span id="state-idle" class={isSent ? "hidden" : "flex items-center gap-2"}>
+                                {t("contact.form.button_idle")}
+                                <Icon name="lucide:send" class="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </span>
+
+                            <span id="state-sending" class="hidden items-center gap-2">
+                                {t("contact.form.button_sending")}
+                                <Icon name="lucide:loader-2" class="h-4 w-4 animate-spin" />
+                            </span>
+
+                            <span id="state-sent" class={isSent ? "flex items-center gap-2" : "hidden"}>
+                                {t("contact.form.button_sent")}
+                                <Icon name="lucide:check-circle-2" class="h-4 w-4" />
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    import { actions } from "astro:actions";
+
+    const form = document.getElementById('contact-form') as HTMLFormElement;
+    const btn = document.getElementById('submit-btn') as HTMLButtonElement;
+    const idleState = document.getElementById('state-idle');
+    const sendingState = document.getElementById('state-sending');
+    const sentState = document.getElementById('state-sent');
+
+    form?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Inicia estado de "Sending"
+        btn.disabled = true;
+        idleState?.classList.add('hidden');
+        sendingState?.classList.remove('hidden');
+
+        const formData = new FormData(form);
+        const { data, error } = await actions.contact(formData);
+
+        // Finaliza estado
+        sendingState?.classList.add('hidden');
+
+        if (!error) {
+            sentState?.classList.remove('hidden');
+            form.reset();
+            // Opcional: Voltar ao estado idle após 3 segundos
+            setTimeout(() => {
+                sentState?.classList.add('hidden');
+                idleState?.classList.remove('hidden');
+                btn.disabled = false;
+            }, 3000);
+        } else {
+            idleState?.classList.remove('hidden');
+            btn.disabled = false;
+            alert("Error sending message");
+        }
+    });
+</script>

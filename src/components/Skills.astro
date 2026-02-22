@@ -1,0 +1,153 @@
+---
+import { Icon } from "astro-icon/components";
+
+import { useTranslations } from "../i18n/utils";
+
+interface Props {
+    lang: "pt" | "en";
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+interface SkillCategory {
+    title: string;
+    iconName: string;
+    skills: string[];
+    className: string;
+    accent?: "purple" | "blue";
+}
+
+const skillCategories: SkillCategory[] = [
+    {
+        title: "Frontend",
+        iconName: "lucide:code-2",
+        skills: ["HTML", "CSS", "SASS", "React", "Next.js", "TypeScript", "Tailwind CSS", "Vue.js", "Angular", "Astro", "React Native", "Expo"],
+        className: "md:col-span-2 md:row-span-2",
+        accent: "purple",
+    },
+    {
+        title: "Backend",
+        iconName: "lucide:server",
+        skills: ["Node.js", "Python", "REST APIs", "PHP"],
+        className: "md:col-span-1 md:row-span-1",
+        accent: "blue",
+    },
+    {
+        title: "Cloud & DevOps",
+        iconName: "lucide:cloud",
+        skills: ["Docker", "Vercel"],
+        className: "md:col-span-1 md:row-span-1",
+    },
+    // {
+    //     title: lang === 'en' ? "Systems" : "Sistemas",
+    //     iconName: "lucide:cpu",
+    //     skills: ["C++", "Rust", "Embedded", "RTOS", "FPGA"],
+    //     className: "md:col-span-1 md:row-span-1",
+    //     accent: "blue",
+    // },
+    {
+        title: lang === 'en' ? "Databases" : "Bancos de dados",
+        iconName: "lucide:database",
+        skills: ["PostgreSQL", "MongoDB", "MySQL", "SQL Server", "Firebase", "SQLite"],
+        className: "md:col-span-1 md:row-span-1",
+    },
+    // {
+    //     title: lang === 'en' ? "Architecture" : "Arquitetura",
+    //     iconName: "lucide:layers",
+    //     skills: ["Microservices", "Event-Driven", "Serverless", "DDD"],
+    //     className: "md:col-span-1 md:row-span-1",
+    //     accent: "purple",
+    // },
+    {
+        title: lang === 'en' ? "Tools" : "Ferramentas",
+        iconName: "lucide:git-branch",
+        skills: ["Git", "Linux", "Figma"],
+        className: "md:col-span-1 md:row-span-1",
+    },
+    {
+        title: lang === 'en' ? "Languages" : "Linguagens",
+        iconName: "lucide:braces",
+        skills: ["JavaScript", "Python", "C++", "C#", "Java", "SQL", "Kotlin"],
+        className: "md:col-span-2 md:row-span-1",
+        accent: "purple",
+    },
+];
+
+// Helper para classes condicionais (Equivalente à lógica do BentoCard)
+const getAccentStyles = (accent?: string) => {
+    if (accent === "purple") return {
+        border: "hover:border-primary/50",
+        text: "text-primary",
+        glow: "",
+        // glow: "bg-[radial-gradient(circle_at_center,var(--color-secondary)_0%,transparent_70%)] opacity-10",
+    };
+    if (accent === "blue") return {
+        border: "hover:border-secondary/50",
+        text: "text-secondary",
+        glow: "",
+        // glow: "bg-[radial-gradient(circle_at_center,var(--color-secondary)_0%,transparent_70%)] opacity-10",
+    };
+    return {
+        border: "hover:border-foreground/30",
+        text: "text-base-content/70",
+        glow: "",
+    };
+};
+---
+
+<section id="skills" class="relative px-6 py-32">
+    <div class="mx-auto max-w-6xl">
+        <div class="mb-16">
+            <span class="mb-3 block font-mono text-xs uppercase tracking-widest text-primary">
+                {t("skills.subtitle")}
+            </span>
+            <h2 class="mb-4 text-3xl font-bold tracking-tight text-base-content text-accent md:text-4xl">
+                {t("skills.title").split('&')[0]}<span class="text-primary">&</span>{t("skills.title").split('&')[1]}
+            </h2>
+            <p class="max-w-lg text-base-content/60">
+                {t("skills.description")}
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+            {skillCategories.map((category) => {
+                const styles = getAccentStyles(category.accent);
+                
+                return (
+                <div class={`
+                    group relative rounded-xl border border-white/10 bg-base-200/50 p-6 
+                    transition-all duration-500 ${styles.border} ${category.className}
+                `}>
+                    {/* Subtle glow on hover - Implementado com gradiente CSS nativo */}
+                    {category.accent && (
+                    <div class={`
+                        pointer-events-none absolute inset-0 rounded-xl opacity-0 
+                        transition-opacity duration-500 group-hover:opacity-100 ${styles.glow}
+                    `} />
+                    )}
+
+                    <div class="relative z-10">
+                    <div class="mb-4 flex items-center gap-3">
+                        <div class={`${styles.text} transition-colors duration-300`}>
+                        <Icon name={category.iconName} class="w-5 h-5" />
+                        </div>
+                        <h3 class="font-mono text-sm font-semibold uppercase tracking-wider text-base-content">
+                        {category.title}
+                        </h3>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2">
+                        {category.skills.map((skill) => (
+                        <span class="rounded-md border border-white/5 bg-base-300/50 px-3 py-1 font-mono text-xs text-base-content/60 transition-colors duration-300 group-hover:text-base-content hover:border-primary/20">
+                            {skill}
+                        </span>
+                        ))}
+                    </div>
+                    </div>
+                </div>
+                );
+            })}
+        </div>
+    </div>
+</section>

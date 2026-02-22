@@ -1,0 +1,57 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<button
+    id="theme-ssl"
+    class="group btn btn-ghost btn-sm btn-square border-none text-muted-foreground hover:text-foreground hover:bg-primary"
+    aria-label={`Toggle theme mode`}
+>
+    <Icon
+        name="lucide:sun"
+        id="sun-icon"
+        class="h-4 w-4 transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110"
+    />
+    <Icon
+        name="lucide:moon"
+        id="moon-icon"
+        class="h-4 w-4 transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110"
+    />
+</button>
+
+<script is:inline>
+    const themeBtn = document.getElementById("theme-ssl");
+    const sunIcon = document.getElementById("sun-icon");
+    const moonIcon = document.getElementById("moon-icon");
+
+    const getTheme = () =>
+        localStorage.getItem("theme") ||
+        (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+
+    const setTheme = (theme) => {
+        document.documentElement.setAttribute("data-theme", theme);
+        localStorage.setItem("theme", theme);
+
+        // Alterna os ícones
+        if (theme === "dark") {
+            sunIcon.classList.remove("hidden");
+            moonIcon.classList.add("hidden");
+        } else {
+            sunIcon.classList.add("hidden");
+            moonIcon.classList.remove("hidden");
+        }
+    };
+
+    // Inicializa
+    setTheme(getTheme());
+
+    themeBtn.addEventListener("click", () => {
+        const newTheme =
+            document.documentElement.getAttribute("data-theme") === "dark"
+                ? "light"
+                : "dark";
+        setTheme(newTheme);
+    });
+</script>
