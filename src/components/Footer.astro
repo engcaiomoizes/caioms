@@ -12,6 +12,7 @@ const t = useTranslations(lang);
 
 const github = import.meta.env.PUBLIC_GITHUB;
 const linkedin = import.meta.env.PUBLIC_LINKEDIN;
+const instagram = import.meta.env.PUBLIC_INSTAGRAM;
 const email = import.meta.env.PUBLIC_EMAIL;
 ---
 
@@ -48,7 +49,8 @@ const email = import.meta.env.PUBLIC_EMAIL;
                             { label: "About", href: "#about" },
                             { label: "Skills", href: "#skills" },
                             { label: "Projects", href: "#projects" },
-                            { label: "Blog", href: "#blog" },
+                            { label: "Contact", href: "#contact" },
+                            // { label: "Blog", href: "#blog" },
                         ].map((link) => (
                             <li>
                                 <a
@@ -70,33 +72,47 @@ const email = import.meta.env.PUBLIC_EMAIL;
                 >
                     {t("footer.contact.label")}
                 </h4>
-                <div class="flex flex-col gap-3">
-                    <a
-                        href=`mailto:${email}`
-                        class="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
-                    >
+                <div class="flex items-center gap-5 mb-4">
+                    {github && (
+                        <a
+                            href={`https://github.com/${github}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-muted-foreground transition-all duration-300 hover:text-foreground hover:drop-shadow-[0_0_8px_oklch(0.65_0.25_285_/_0.4)]"
+                            aria-label="GitHub Profile"
+                        >
+                            <Icon name="lucide:github" class="h-5 w-5" />
+                        </a>
+                    )}
+                    {linkedin && (
+                        <a
+                            href={`https://linkedin.com/in/${linkedin}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-muted-foreground transition-all duration-300 hover:text-foreground hover:drop-shadow-[0_0_8px_oklch(0.65_0.20_250_/_0.4)]"
+                            aria-label="LinkedIn Profile"
+                        >
+                            <Icon name="lucide:linkedin" class="h-5 w-5" />
+                        </a>
+                    )}
+                    {instagram && (
+                        <a
+                            href={`https://instagram.com/${linkedin}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-muted-foreground transition-all duration-300 hover:text-foreground hover:drop-shadow-[0_0_8px_oklch(0.65_0.20_250_/_0.4)]"
+                            aria-label="LinkedIn Profile"
+                        >
+                            <Icon name="lucide:instagram" class="h-5 w-5" />
+                        </a>
+                    )}
+                </div>
+                {email && (
+                    <span class="font-mono text-xs text-muted-foreground flex items-center gap-2">
                         <Icon name="lucide:mail" class="h-4 w-4" />
                         {email}
-                    </a>
-                    <a
-                        href=`https://github.com/${github}`
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
-                    >
-                        <Icon name="lucide:github" class="h-4 w-4" />
-                        github.com/{github}
-                    </a>
-                    <a
-                        href=`https://linkedin.com/in/${linkedin}`
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
-                    >
-                        <Icon name="lucide:linkedin" class="h-4 w-4" />
-                        linkedin.com/in/{linkedin}
-                    </a>
-                </div>
+                    </span>
+                )}
             </div>
         </div>
 

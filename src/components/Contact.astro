@@ -13,6 +13,7 @@ const t = useTranslations(lang);
 
 const github = import.meta.env.PUBLIC_GITHUB;
 const linkedin = import.meta.env.PUBLIC_LINKEDIN;
+const instagram = import.meta.env.PUBLIC_INSTAGRAM;
 const email = import.meta.env.PUBLIC_EMAIL;
 
 const result = Astro.getActionResult(actions.contact);
@@ -46,6 +47,13 @@ const contactMethods = [
         value: `linkedin.com/in/${linkedin}`,
         href: `https://linkedin.com/in/${linkedin}`,
         description: t("contact.linkedin.description"),
+    },
+    {
+        iconName: "lucide:instagram",
+        label: "Instagram",
+        value: `instagram.com/${instagram}`,
+        href: `https://instagram.com/${instagram}`,
+        description: t("contact.instagram.description"),
     },
 ];
 ---
